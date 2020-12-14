@@ -4,14 +4,11 @@ YOLOv4 training on synthetic data(combine objects with background)
 1. training yolov4 for synthetic data
 2. generate anchor(object image only)
 
-
 # train
 
 train.py
 
-
-
-To do 
+# To do 
 
 1. Half2 Prescision Inference
 2. Weights Converting(Darket <-> PyTorch)
