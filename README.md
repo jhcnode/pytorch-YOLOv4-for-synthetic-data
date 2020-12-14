@@ -5,7 +5,7 @@ YOLOv4 training on synthetic data(combine objects with background)
 2. generate anchor(object image only)
 
 
-1. train
+# train
 
 train.py
 
