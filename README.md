@@ -10,5 +10,6 @@ train.py
 
 # To do 
 
-1. Half2 Prescision Inference
-2. Weights Converting(Darket <-> PyTorch)
+1. Half Prescision Inference
+2. Half2 Prescision Inference
+3. Weights Converting(Darket <-> PyTorch)
