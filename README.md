@@ -6,6 +6,7 @@ YOLOv4 training on synthetic data(combine objects with background)
 
 # train
 
+train.py
 
 # To do 
 
