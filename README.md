@@ -6,8 +6,6 @@ YOLOv4 training using synthetic data(combine objects with background)
 
 # train
 
-train.py
-
 # To do 
 
 1. Half Prescision Inference
