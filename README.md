@@ -11,6 +11,6 @@ train.py
 # To do 
 
 1. Half Prescision Inference(C++,Cuda)
-2. Half2 Prescision InferenceC++,Cuda)
+2. Half2 Prescision Inference(C++,Cuda)
 3. Weights Converting(Darket <-> PyTorch)
 4. Release weights that training public data 
