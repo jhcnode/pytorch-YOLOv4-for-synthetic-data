@@ -3,7 +3,7 @@ YOLOv4 training using synthetic data(combine objects with background)
 
 1. training yolov4 for synthetic data
 2. generate anchor(object image only)
-
+3. copy and paste augmentation
 # train
 
 train.py
