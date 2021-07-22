@@ -335,39 +335,39 @@ class Yolo_dataset(Dataset):
 			patch_img = cv2.imread(patch_dir, cv2.IMREAD_UNCHANGED)
 			if (patch_img is None):
 				continue
-			ph, pw, pc = patch_img.shape
-			if np.random.random() < 0.5:
-				screw_scale = 0.4
-				pts_base = [[0, 0], [pw, 0], [0, ph], [pw, ph]]
+			# ph, pw, pc = patch_img.shape
+			# if np.random.random() < 0.5:
+				# screw_scale = 0.4
+				# pts_base = [[0, 0], [pw, 0], [0, ph], [pw, ph]]
 
-				tl = pts_base[0].copy()
-				tl[0] = np.random.uniform(low=0, high=pw * screw_scale, size=1)[0]
-				tl[1] = np.random.uniform(low=0, high=ph * screw_scale, size=1)[0]
+				# tl = pts_base[0].copy()
+				# tl[0] = np.random.uniform(low=0, high=pw * screw_scale, size=1)[0]
+				# tl[1] = np.random.uniform(low=0, high=ph * screw_scale, size=1)[0]
 
-				tr = pts_base[1].copy()
-				tr[0] = tr[0] - np.random.uniform(low=0, high=pw * screw_scale, size=1)[0]
-				tr[1] = np.random.uniform(low=0, high=ph * screw_scale, size=1)[0]
+				# tr = pts_base[1].copy()
+				# tr[0] = tr[0] - np.random.uniform(low=0, high=pw * screw_scale, size=1)[0]
+				# tr[1] = np.random.uniform(low=0, high=ph * screw_scale, size=1)[0]
 
-				bl = pts_base[2].copy()
-				bl[0] = np.random.uniform(low=0, high=pw * screw_scale, size=1)[0]
-				bl[1] = bl[1] - np.random.uniform(low=0, high=ph * screw_scale, size=1)[0]
+				# bl = pts_base[2].copy()
+				# bl[0] = np.random.uniform(low=0, high=pw * screw_scale, size=1)[0]
+				# bl[1] = bl[1] - np.random.uniform(low=0, high=ph * screw_scale, size=1)[0]
 
-				br = pts_base[3].copy()
-				br[0] = br[0] - np.random.uniform(low=0, high=pw * screw_scale, size=1)[0]
-				br[1] = br[1] - np.random.uniform(low=0, high=ph * screw_scale, size=1)[0]
-				pts1 = np.float32([tl, tr, bl, br])
+				# br = pts_base[3].copy()
+				# br[0] = br[0] - np.random.uniform(low=0, high=pw * screw_scale, size=1)[0]
+				# br[1] = br[1] - np.random.uniform(low=0, high=ph * screw_scale, size=1)[0]
+				# pts1 = np.float32([tl, tr, bl, br])
 
-				pts_base = np.float32(pts_base)
-				PM = cv2.getPerspectiveTransform(pts_base, pts1)
-				patch_img = cv2.warpPerspective(patch_img, PM, (pw, ph))
-				coords = np.argwhere(patch_img[:, :, 3] > 0)
-				if (coords is None):
-					continue
-				if (coords.shape[0] < 4):
-					continue
-				x0, y0 = coords.min(axis=0)
-				x1, y1 = coords.max(axis=0) + 1
-				patch_img = patch_img[x0:x1, y0:y1]
+				# pts_base = np.float32(pts_base)
+				# PM = cv2.getPerspectiveTransform(pts_base, pts1)
+				# patch_img = cv2.warpPerspective(patch_img, PM, (pw, ph))
+				# coords = np.argwhere(patch_img[:, :, 3] > 0)
+				# if (coords is None):
+					# continue
+				# if (coords.shape[0] < 4):
+					# continue
+				# x0, y0 = coords.min(axis=0)
+				# x1, y1 = coords.max(axis=0) + 1
+				# patch_img = patch_img[x0:x1, y0:y1]
 
 			if np.random.random() < 0.5:
 				patch_img= (patch_img.astype(np.float32) / 255.)

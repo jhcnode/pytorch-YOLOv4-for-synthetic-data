@@ -1,29 +1,26 @@
 from tool.utils import *
 from tool.torch_utils import *
 from tool.darknet2pytorch import Darknet
+from gen_anchor import read_anchor
+
 import argparse
 
 use_cuda = True
 
-def detect_cv2(cfgfile, weightfile, imgfile):
-    import cv2
-    m = Darknet(cfgfile)
 
-    m.print_network()
-    m.load_weights(weightfile)
+def detect_cv2(namesfile,anchors,weightfile,imgfile):
+    import cv2
+    class_names = load_class_names(namesfile)
+    n_classes=len(class_names)	
+    m = Yolov4(anchors=anchors,yolov4conv137weight=None, n_classes=n_classes, inference=True)
+    pretrained_dict = torch.load(weightfile, map_location=torch.device('cuda'))
+    m.load_state_dict(pretrained_dict)
+
     print('Loading weights from %s... Done!' % (weightfile))
 
     if use_cuda:
         m.cuda()
 
-    num_classes = m.num_classes
-    if num_classes == 20:
-        namesfile = 'data/voc.names'
-    elif num_classes == 80:
-        namesfile = 'data/coco.names'
-    else:
-        namesfile = 'data/x.names'
-    class_names = load_class_names(namesfile)
 
     img = cv2.imread(imgfile)
     sized = cv2.resize(img, (m.width, m.height))
@@ -39,12 +36,13 @@ def detect_cv2(cfgfile, weightfile, imgfile):
     plot_boxes_cv2(img, boxes[0], savename='predictions.jpg', class_names=class_names)
 
 
-def detect_cv2_camera(cfgfile, weightfile):
+def detect_cv2_camera(namesfile,anchors,weightfile):
     import cv2
-    m = Darknet(cfgfile)
-
-    m.print_network()
-    m.load_weights(weightfile)
+    class_names = load_class_names(namesfile)
+    n_classes=len(class_names)	
+    m = Yolov4(anchors=anchors,yolov4conv137weight=None, n_classes=n_classes, inference=True)
+    pretrained_dict = torch.load(weightfile, map_location=torch.device('cuda'))
+    m.load_state_dict(pretrained_dict)
     print('Loading weights from %s... Done!' % (weightfile))
 
     if use_cuda:
@@ -55,15 +53,6 @@ def detect_cv2_camera(cfgfile, weightfile):
     cap.set(3, 1280)
     cap.set(4, 720)
     print("Starting the YOLO loop...")
-
-    num_classes = m.num_classes
-    if num_classes == 20:
-        namesfile = 'data/voc.names'
-    elif num_classes == 80:
-        namesfile = 'data/coco.names'
-    else:
-        namesfile = 'data/x.names'
-    class_names = load_class_names(namesfile)
 
     while True:
         ret, img = cap.read()
@@ -83,26 +72,18 @@ def detect_cv2_camera(cfgfile, weightfile):
     cap.release()
 
 
-def detect_skimage(cfgfile, weightfile, imgfile):
+def detect_skimage(namesfile,anchors,weightfile, imgfile):
     from skimage import io
     from skimage.transform import resize
-    m = Darknet(cfgfile)
-
-    m.print_network()
-    m.load_weights(weightfile)
+    class_names = load_class_names(namesfile)
+	n_classes=len(class_names)
+	m = Yolov4(anchors=anchors,yolov4conv137weight=None, n_classes=n_classes, inference=True)
+    pretrained_dict = torch.load(weightfile, map_location=torch.device('cuda'))
+    m.load_state_dict(pretrained_dict)
     print('Loading weights from %s... Done!' % (weightfile))
 
     if use_cuda:
         m.cuda()
-
-    num_classes = m.num_classes
-    if num_classes == 20:
-        namesfile = 'data/voc.names'
-    elif num_classes == 80:
-        namesfile = 'data/coco.names'
-    else:
-        namesfile = 'data/x.names'
-    class_names = load_class_names(namesfile)
 
     img = io.imread(imgfile)
     sized = resize(img, (m.width, m.height)) * 255
@@ -119,8 +100,6 @@ def detect_skimage(cfgfile, weightfile, imgfile):
 
 def get_args():
     parser = argparse.ArgumentParser('Test your image or video by trained model.')
-    parser.add_argument('-cfgfile', type=str, default='./cfg/yolov4.cfg',
-                        help='path of cfg file', dest='cfgfile')
     parser.add_argument('-weightfile', type=str,
                         default='./checkpoints/Yolov4_epoch1.pth',
                         help='path of trained model.', dest='weightfile')
@@ -134,10 +113,11 @@ def get_args():
 
 if __name__ == '__main__':
     args = get_args()
+	anchors=read_anchor("./data/anchor.txt")
+	namesfile="./data/x.names"
     if args.imgfile:
-        detect_cv2(args.cfgfile, args.weightfile, args.imgfile)
-        # detect_imges(args.cfgfile, args.weightfile)
-        # detect_cv2(args.cfgfile, args.weightfile, args.imgfile)
-        # detect_skimage(args.cfgfile, args.weightfile, args.imgfile)
+        detect_cv2(namesfile,anchors,args.weightfile, args.imgfile)
+        # detect_cv2(namesfile,anchors,args.weightfile, args.imgfile)
+        # detect_skimage(namesfile,anchors,args.weightfile, args.imgfile)
     else:
-        detect_cv2_camera(args.cfgfile, args.weightfile)
+        detect_cv2_camera(namesfile,anchors,args.weightfile)
