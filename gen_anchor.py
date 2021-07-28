@@ -67,7 +67,7 @@ def kmeans(boxes, k, dist=np.median):
     return clusters
 
 def read_anchor(path):
-    anchor_dir = os.path.join(path, "anchor.txt")
+    anchor_dir = os.path.join(path)
     anchors=[]
     if os.path.exists(anchor_dir)==True:
         with open(anchor_dir) as f:
